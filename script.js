@@ -22,9 +22,10 @@ for (let i = 0; i < newTimeArray.length; i++) {
 }
 
 const localStorageGetter = () => {
-    const currentStorage = localStorage;
+    const today = "8-12-2022";
+    const currentStorage = localStorage.getItem(today);
     if (currentStorage) {
-        return currentStorage;
+        return JSON.parse(currentStorage);
     }
 }
 
@@ -36,6 +37,10 @@ const container = $(".container");
 
 for (let i = 0; i < finalTimerArray.length; i++) {
     const currentStorage = localStorageGetter();
+    // console.log(currentStorage)
+    // console.log(finalTimerArray[i]);
+    
+
 
     const toAppend = $("<div class='row'></div>");
 
@@ -45,6 +50,13 @@ for (let i = 0; i < finalTimerArray.length; i++) {
 
     childTime.addClass("d-flex align-items-center justify-content-center hour");
     const testInput = $("<textarea class='col-10 description'></textarea");
+
+    for (let j = 0; j < currentStorage.length; j++) {
+        if (Object.values(currentStorage[j])[0].includes(finalTimerArray[i])) {
+            testInput.text(Object.values(currentStorage[j])[1]);
+        }
+    }
+
 
     if (!reachedCurrentTime) {
         testInput.addClass("past");
@@ -58,10 +70,6 @@ for (let i = 0; i < finalTimerArray.length; i++) {
     } 
 
 
-    // if (currentStorage.getItem(finalTimerArray[i])) { 
-        // testInput.val(currentStorage.getItem(finalTimerArray[i]));
-    // }
-
 
     const saveButtonCol = $("<div class='col-1'></div>");
     saveButtonCol.addClass("saveBtn");
@@ -72,38 +80,32 @@ for (let i = 0; i < finalTimerArray.length; i++) {
     saveButtonCol.on('click', (e) => {
         const textTarget = $(e.target).siblings(".col-10").val();
         const localKey = $(e.target).siblings(".col-1").text();
+
         const key = "8-12-2022";
+
         const currentStorageArray = localStorage.getItem(key);
         let  parsedStorage = JSON.parse(currentStorageArray);
-        // const alreadyKeys = Objects.keys(parsedStorage);
-        
+
         const timeAndMessage = {time: localKey, "text": textTarget};
-
-        let appendArray = [];
-
-        if (parsedStorage != null) {
-            appendArray = parsedStorage;
+   
+        appender = [];
+        if (parsedStorage) {
+            appender = parsedStorage;
         }
 
-        // console.log(Object.values(parsedStorage).includes("12AM"));
-
-        // The values are now as if it returned Object.entries 
-        // console.log(Object.values(parsedStorage));
-        if (parsedStorage) {
-            for (let i = 0; i < parsedStorage.length; i++) {
-                // console.log(parsedStorage[i]);
-                console.log(Object.values(parsedStorage[i]));
-                if (Object.values(parsedStorage[i]).includes("12AM")) {
-                    parsedStorage[i] = timeAndMessage;
-            
-                }
+        for (let i = 0; i < appender.length; i++) {
+            if (Object.values(appender[i])[0].includes(timeAndMessage.time)) {
+                appender[i] = timeAndMessage;
+                localStorage.setItem(key, JSON.stringify(appender));
+                return;
             }
-    }
-    
-        appendArray.push(timeAndMessage);
+        }
 
-        localStorage.setItem(key, JSON.stringify(appendArray));
-        
+        appender.push(timeAndMessage);
+
+        localStorage.setItem(key, JSON.stringify(appender));
+
+
     });
 
 
