@@ -51,9 +51,11 @@ for (let i = 0; i < finalTimerArray.length; i++) {
     childTime.addClass("d-flex align-items-center justify-content-center hour");
     const testInput = $("<textarea class='col-10 description'></textarea");
 
-    for (let j = 0; j < currentStorage.length; j++) {
-        if (Object.values(currentStorage[j])[0].includes(finalTimerArray[i])) {
-            testInput.text(Object.values(currentStorage[j])[1]);
+    if (currentStorage) {
+        for (let j = 0; j < currentStorage.length; j++) {
+            if (Object.values(currentStorage[j])[0].includes(finalTimerArray[i])) {
+                testInput.text(Object.values(currentStorage[j])[1]);
+            }
         }
     }
 
@@ -87,6 +89,8 @@ for (let i = 0; i < finalTimerArray.length; i++) {
         let  parsedStorage = JSON.parse(currentStorageArray);
 
         const timeAndMessage = {time: localKey, "text": textTarget};
+
+        console.log(timeAndMessage);
    
         appender = [];
         if (parsedStorage) {
