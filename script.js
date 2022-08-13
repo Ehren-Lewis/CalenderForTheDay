@@ -3,56 +3,113 @@
 // const time = moment().format("dddd, MMMM  Do, YYYY");
 // console.log(time);
 
+// const hour = moment().format("hh");
+
+const hour = 11;
 
 
-const standardTimeDivider = 12;
 const timeArray = ['AM', 'PM'];
 
-
+const newTimeArray = [9, 10, 11 , 12, 1, 2, 3, 4, 5]
 const finalTimerArray = [];
 
-for( let i = 0; i < timeArray.length; i++) {
-    for (let j = 0; j < standardTimeDivider; j ++) {
-        if (j == 0 ) {
-        finalTimerArray.push(`${12}${timeArray[i]}`);
-        }
-        else {
-            finalTimerArray.push(`${j}${timeArray[i]}`);
-        }
+for (let i = 0; i < newTimeArray.length; i++) {
+    if ( newTimeArray[i] < 6) {
+        finalTimerArray.push(`${newTimeArray[i]}PM`);
+    } else {
+        finalTimerArray.push(`${newTimeArray[i]}AM`);
     }
 }
 
-console.log(finalTimerArray);
+const localStorageGetter = () => {
+    const currentStorage = localStorage;
+    if (currentStorage) {
+        return currentStorage;
+    }
+}
+
+const localStorageArray = [];
+
+var reachedCurrentTime = false;
 
 const container = $(".container");
 
 for (let i = 0; i < finalTimerArray.length; i++) {
+    const currentStorage = localStorageGetter();
+
     const toAppend = $("<div class='row'></div>");
-    toAppend.css("border", "1px solid black");
+
 
     const childTime = $("<div class='col-1'></div>");
     childTime.text(finalTimerArray[i]);
-    childTime.addClass("d-flex align-items-center justify-content-center");
-    const textField = $("<div class='col-10'></div>");
-    const saveButtonCol = $("<div class='col-1'></div>");
-    saveButtonCol.addClass("bg-success");
 
+    childTime.addClass("d-flex align-items-center justify-content-center hour");
+    const testInput = $("<textarea class='col-10 description'></textarea");
+
+    if (!reachedCurrentTime) {
+        testInput.addClass("past");
+        if ( newTimeArray[i] == hour) {
+        reachedCurrentTime = true;
+        testInput.removeClass("past");
+        testInput.addClass("present");
+        }
+    } else if (!reachedCurrentTime == false) {
+        testInput.addClass("future");
+    } 
+
+
+    // if (currentStorage.getItem(finalTimerArray[i])) { 
+        // testInput.val(currentStorage.getItem(finalTimerArray[i]));
+    // }
+
+
+    const saveButtonCol = $("<div class='col-1'></div>");
+    saveButtonCol.addClass("saveBtn");
+    saveButtonCol.append("<i class='fas fa-save'></i>");
+
+
+    // Set localstorage function
     saveButtonCol.on('click', (e) => {
-        // console.log(e);
-        console.log($(e.target).siblings(".col-1").text());
-        // const 
+        const textTarget = $(e.target).siblings(".col-10").val();
+        const localKey = $(e.target).siblings(".col-1").text();
+        const key = "8-12-2022";
+        const currentStorageArray = localStorage.getItem(key);
+        let  parsedStorage = JSON.parse(currentStorageArray);
+        // const alreadyKeys = Objects.keys(parsedStorage);
+        
+        const timeAndMessage = {time: localKey, "text": textTarget};
+
+        let appendArray = [];
+
+        if (parsedStorage != null) {
+            appendArray = parsedStorage;
+        }
+
+        // console.log(Object.values(parsedStorage).includes("12AM"));
+
+        // The values are now as if it returned Object.entries 
+        // console.log(Object.values(parsedStorage));
+        if (parsedStorage) {
+            for (let i = 0; i < parsedStorage.length; i++) {
+                // console.log(parsedStorage[i]);
+                console.log(Object.values(parsedStorage[i]));
+                if (Object.values(parsedStorage[i]).includes("12AM")) {
+                    parsedStorage[i] = timeAndMessage;
+            
+                }
+            }
+    }
+    
+        appendArray.push(timeAndMessage);
+
+        localStorage.setItem(key, JSON.stringify(appendArray));
+        
     });
 
-    // const saveButton = $("<button class='btn btn-primary'></button>");
-    // saveButton.css("width", "inheret")
-    // saveButtonCol.append(saveButton);
 
-    childTime.css("border", "1px solid blue");
-    textField.css("border", "1px solid yellow");
-    // saveButtonCol.css("border", "1px solid orange");
 
     toAppend.append(childTime);
-    toAppend.append(textField);
+    toAppend.append(testInput);
     toAppend.append(saveButtonCol);
     container.append(toAppend);
 }
@@ -63,8 +120,4 @@ for (let i = 0; i < finalTimerArray.length; i++) {
 // The current hour is red 
 // The future hours are green
 
-// div row
-// div col-1: stores time;
-// dive col-10: stores text componenet
-// div col-1: stores save
 
