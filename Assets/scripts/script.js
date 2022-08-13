@@ -89,8 +89,6 @@ for (let i = 0; i < finalTimerArray.length; i++) {
         let  parsedStorage = JSON.parse(currentStorageArray);
 
         const timeAndMessage = {time: localKey, "text": textTarget};
-
-        console.log(timeAndMessage);
    
         appender = [];
         if (parsedStorage) {
