@@ -80,7 +80,6 @@ for (let i = 0; i < finalTimerArray.length; i++) {
     saveButtonCol.append("<i class='fas fa-save'></i>");
 
     $(".fas").on('click', () => {
-        console.log('hello');
     })
 
 
@@ -88,12 +87,19 @@ for (let i = 0; i < finalTimerArray.length; i++) {
 
     // Set localstorage function
     saveButtonCol.on('click', (e) => {
-        console.log('hello 2');
-        const textTarget = $(e.target).siblings(".col-10").val();
-        const localKey = $(e.target).siblings(".col-1").text();
+        if ($(e.target).attr("class") == "fas fa-save") {
+            const textTarget = $(e.target).parent().siblings(".col-10").val();
+            const localKey = $(e.target).parent().siblings(".col-1").text();
+
+        } else {
+            const textTarget = $(e.target).siblings(".col-10").val();
+            const localKey = $(e.target).siblings(".col-1").text();
+  
+        }
+
+        console.log(localKey);
 
         const key = "8-12-2022";
-
         const currentStorageArray = localStorage.getItem(key);
         let  parsedStorage = JSON.parse(currentStorageArray);
 
