@@ -7,6 +7,8 @@
 
 const hour = 11;
 
+const date = new Date();
+// const today = date(`${date.getMonth()} ${date.getDay()}, ${date.getFullYear()}`)
 
 const timeArray = ['AM', 'PM'];
 
@@ -77,9 +79,16 @@ for (let i = 0; i < finalTimerArray.length; i++) {
     saveButtonCol.addClass("saveBtn");
     saveButtonCol.append("<i class='fas fa-save'></i>");
 
+    $(".fas").on('click', () => {
+        console.log('hello');
+    })
+
+
+
 
     // Set localstorage function
     saveButtonCol.on('click', (e) => {
+        console.log('hello 2');
         const textTarget = $(e.target).siblings(".col-10").val();
         const localKey = $(e.target).siblings(".col-1").text();
 
