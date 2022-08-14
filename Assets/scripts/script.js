@@ -104,7 +104,6 @@ for (let i = 0; i < timeArrayFormatted.length; i++) {
         // Appender is used to make it where you can update the messages
         // and have more than one text information stored in a day 
         appender = [];
-        console.log(parsedStorage);
         if (parsedStorage) {
             appender = parsedStorage;
         }
