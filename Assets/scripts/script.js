@@ -23,9 +23,6 @@ if (hours > 12) {
 for (let i = 0; i < timeArrayUnformatted.length; i++) {
     if ( timeArrayUnformatted[i] < 6 || timeArrayUnformatted[i] == 12) {
         timeArrayFormatted.push(`${timeArrayUnformatted[i]}PM`);
-    // } else if (timeArrayUnformatted[i] == 12) {
-    //     timeArrayFormatted.push(`${timeArrayUnformatted[i]} NOON`);
-    
     }
      else {
         timeArrayFormatted.push(`${timeArrayUnformatted[i]}AM`);
@@ -57,13 +54,6 @@ for (let i = 0; i < timeArrayFormatted.length; i++) {
 
     if (currentStorage) {
         for (let j = 0; j < currentStorage.length; j++) {
-            // if (Object.values(currentStorage[j])[0].includes(timeArrayFormatted[i])) {
-            //     console.log(Object.values(currentStorage[j])[0]);
-            //     console.log(`\t${timeArrayFormatted[i]}`);
-            //     textArea.text(Object.values(currentStorage[j])[1]);
-            // }
-            // console.log(currentStorage[j].time);
-            // console.log*timeArrayFormatted[i]
             if (currentStorage[j].time == timeArrayFormatted[i]) {
                 textArea.text(Object.values(currentStorage[j])[1]);
             }
@@ -74,6 +64,7 @@ for (let i = 0; i < timeArrayFormatted.length; i++) {
         textArea.addClass("past");
         if ( timeArrayUnformatted[i] == hours) {
         reachedCurrentTime = true;
+
         // Since nested in an if statement, it must be removed
         // for the current time element
         textArea.removeClass("past");
@@ -113,6 +104,7 @@ for (let i = 0; i < timeArrayFormatted.length; i++) {
         // Appender is used to make it where you can update the messages
         // and have more than one text information stored in a day 
         appender = [];
+        console.log(parsedStorage);
         if (parsedStorage) {
             appender = parsedStorage;
         }
@@ -120,9 +112,7 @@ for (let i = 0; i < timeArrayFormatted.length; i++) {
         // Checks to see if there is a certain time value in an array 
         // if there is then it will overwrite it instead of appending to the message 
         for (let i = 0; i < appender.length; i++) {
-            if (Object.values(appender[i])[0].includes(timeAndMessage.time)) {
-                // console.log(timeAndMessage.time);
-                // console.log(Object.values(appender[i])[0]);
+                if (appender[i].time == timeArrayFormatted[i]) {
                 appender[i] = timeAndMessage;
                 localStorage.setItem(todayKey, JSON.stringify(appender));
                 return;
