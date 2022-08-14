@@ -1,22 +1,32 @@
-// import moment from 'moment';
-// var moment = require('moment');
-// const time = moment().format("dddd, MMMM  Do, YYYY");
-// console.log(time);
-
-// const hour = moment().format("hh");
-
 const hour = 11;
-
 const date = new Date();
-// const today = date(`${date.getMonth()} ${date.getDay()}, ${date.getFullYear()}`)
-
 const timeArray = ['AM', 'PM'];
-
 const newTimeArray = [9, 10, 11 , 12, 1, 2, 3, 4, 5]
 const finalTimerArray = [];
 
+
+
+const months = ['January', 'February', 'March', 'April', 'May', 'June',
+'July', 'August', 'September', 'October', 'Novermber', 'December'];
+
+const day = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+const todayKey = `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
+
+const today = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+
+$("#currentDay").text(`${day[date.getDay(today)]} ${today}`);
+
+let hours = date.getHours(today);
+
+if (hours > 12) {
+    hours = hours - 12;
+}
+
+console.log(hours)
+
 for (let i = 0; i < newTimeArray.length; i++) {
-    if ( newTimeArray[i] < 6) {
+    if ( newTimeArray[i] < 6 || newTimeArray[i] == 12) {
         finalTimerArray.push(`${newTimeArray[i]}PM`);
     } else {
         finalTimerArray.push(`${newTimeArray[i]}AM`);
@@ -24,8 +34,7 @@ for (let i = 0; i < newTimeArray.length; i++) {
 }
 
 const localStorageGetter = () => {
-    const today = "8-12-2022";
-    const currentStorage = localStorage.getItem(today);
+    const currentStorage = localStorage.getItem(todayKey);
     if (currentStorage) {
         return JSON.parse(currentStorage);
     }
@@ -38,14 +47,10 @@ var reachedCurrentTime = false;
 const container = $(".container");
 
 for (let i = 0; i < finalTimerArray.length; i++) {
-    const currentStorage = localStorageGetter();
-    // console.log(currentStorage)
-    // console.log(finalTimerArray[i]);
-    
 
+    const currentStorage = localStorageGetter();
 
     const toAppend = $("<div class='row'></div>");
-
 
     const childTime = $("<div class='col-1'></div>");
     childTime.text(finalTimerArray[i]);
@@ -64,7 +69,7 @@ for (let i = 0; i < finalTimerArray.length; i++) {
 
     if (!reachedCurrentTime) {
         testInput.addClass("past");
-        if ( newTimeArray[i] == hour) {
+        if ( newTimeArray[i] == hours) {
         reachedCurrentTime = true;
         testInput.removeClass("past");
         testInput.addClass("present");
@@ -98,8 +103,7 @@ for (let i = 0; i < finalTimerArray.length; i++) {
         }
 
 
-        const key = "8-12-2022";
-        const currentStorageArray = localStorage.getItem(key);
+        const currentStorageArray = localStorage.getItem(todayKey);
         let  parsedStorage = JSON.parse(currentStorageArray);
 
         const timeAndMessage = {time: localKey, "text": textTarget};
@@ -112,14 +116,14 @@ for (let i = 0; i < finalTimerArray.length; i++) {
         for (let i = 0; i < appender.length; i++) {
             if (Object.values(appender[i])[0].includes(timeAndMessage.time)) {
                 appender[i] = timeAndMessage;
-                localStorage.setItem(key, JSON.stringify(appender));
+                localStorage.setItem(todayKey, JSON.stringify(appender));
                 return;
             }
         }
 
         appender.push(timeAndMessage);
 
-        localStorage.setItem(key, JSON.stringify(appender));
+        localStorage.setItem(todayKey, JSON.stringify(appender));
 
 
     });
